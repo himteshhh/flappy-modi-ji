@@ -109,18 +109,18 @@
         const pipeImg = new Image();
         pipeImg.src = 'pipe.jpg'; // Changed to JPG
 
-        // Game variables
+        // Game variables (physics constants kept fixed for consistent gameplay)
         let bird = { x: 50, y: 300, width: 34, height: 24, velocity: 0 };
-        let gravity = 0.1;
-        let jump = -3;
+        let gravity = 0.1; // Fixed
+        let jump = -3; // Fixed
         let pipes = [];
         let pipeWidth = 70;
         let pipeGap = 170;
-        let pipeSpeed = 0.8;
+        let pipeSpeed = 0.8; // Fixed
         let score = 0;
         let gameRunning = true;
 
-        // Resize canvas for mobile
+        // Resize canvas for mobile (scale visuals only)
         function resizeCanvas() {
             const aspectRatio = 400 / 600;
             const maxWidth = Math.min(window.innerWidth - 20, 400);
@@ -132,12 +132,14 @@
                 canvas.width = maxWidth;
                 canvas.height = maxWidth / aspectRatio;
             }
-            // Adjust game elements proportionally
-            bird.width = 34 * (canvas.width / 400);
-            bird.height = 24 * (canvas.height / 600);
-            pipeWidth = 70 * (canvas.width / 400);
-            pipeGap = 170 * (canvas.height / 600);
-            pipeSpeed = 0.8 * (canvas.width / 400);
+            // Scale visual elements proportionally, but keep physics fixed
+            const scale = canvas.width / 400;
+            bird.width = 34 * scale;
+            bird.height = 24 * scale;
+            pipeWidth = 70 * scale;
+            pipeGap = 170 * scale;
+            // Reset bird position to center on resize
+            bird.y = canvas.height / 2;
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas(); // Initial resize
@@ -165,7 +167,7 @@
         function update() {
             if (!gameRunning) return;
 
-            // Bird physics
+            // Bird physics (fixed constants)
             bird.velocity += gravity;
             bird.y += bird.velocity;
 
@@ -181,7 +183,7 @@
                 });
             }
 
-            // Move pipes
+            // Move pipes (fixed speed)
             pipes.forEach(pipe => {
                 pipe.x -= pipeSpeed;
             });
